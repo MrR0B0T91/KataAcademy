@@ -22,7 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
 
-            String SQL = "CREATE TABLE user " +
+            String SQL = "CREATE TABLE IF NOT EXISTS user " +
                     "(id BIGINT not NULL, " +
                     " name VARCHAR(50), " +
                     " last_name VARCHAR (50), " +
@@ -41,9 +41,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
 
-            String SQL = "DROP TABLE user";
+            String SQL = "DROP TABLE IF EXISTS user";
 
-            statement.executeUpdate(SQL);
+            statement.execute(SQL);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,11 +54,6 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
 
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
-
-//            StringBuilder builder = new StringBuilder();
-//            builder.append(idCounter++)
-//                    .append(", ")
-//                    .append("'");
 
             String SQL = "INSERT INTO user VALUES (" + idCounter++ + ", '" + name + "', '" + lastName + "', " + age + ")";
 
