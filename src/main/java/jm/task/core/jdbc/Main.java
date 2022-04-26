@@ -8,7 +8,12 @@ import jm.task.core.jdbc.util.Util;
 public class Main {
     public static void main(String[] args) {
         // реализуйте алгоритм здесь
-
+//        UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl(); - использовать интерфейс
+//
+//        писать запросы сразу в метод
+//
+//        использовать PreparedStatement для запросов с параметрами (в JDBC)
+//============================================================================
 //        UserDao userDao = new UserDaoJDBCImpl();
 //
 //        userDao.createUsersTable();
@@ -26,9 +31,9 @@ public class Main {
 //        userDao.cleanUsersTable();
 //
 //        userDao.dropUsersTable();
-//==================================================================
+//==============================================================================
 
-//        UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
+//        UserDao userDaoHibernate = new UserDaoHibernateImpl();
 //
 //        userDaoHibernate.createUsersTable();
 //
@@ -45,7 +50,7 @@ public class Main {
 //        System.out.println(userDaoHibernate.getAllUsers());
 //
 //        userDaoHibernate.cleanUsersTable();
-
+//
 //        userDaoHibernate.dropUsersTable();
     }
 }
