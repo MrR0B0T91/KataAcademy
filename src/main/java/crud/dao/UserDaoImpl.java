@@ -2,7 +2,6 @@ package crud.dao;
 
 import crud.model.User;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,14 +22,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public void add(User user) {
 
         entityManager.persist(user);
     }
 
     @Override
-    @Transactional
     public void remove(Long id) {
 
         User user = entityManager.find(User.class, id);
@@ -38,7 +35,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public void update(Long id, User user) {
 
         User updatedUser = entityManager.find(User.class, id);
