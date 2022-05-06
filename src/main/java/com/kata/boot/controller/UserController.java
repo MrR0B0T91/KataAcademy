@@ -2,7 +2,6 @@ package com.kata.boot.controller;
 
 import com.kata.boot.model.User;
 import com.kata.boot.service.UserService;
-import com.kata.boot.service.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,8 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userService = userServiceImpl;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
