@@ -1,37 +1,16 @@
 package com.kata.boot.service;
 
 import com.kata.boot.model.User;
-import com.kata.boot.repository.UserRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class UserService {
-    private final UserRepository userRepository;
+public interface UserService {
 
-    public UserService(UserRepository userRepository) {
+    public List<User> findAll();
 
-        this.userRepository = userRepository;
-    }
+    public void save(User user);
 
-    public List<User> findAll() {
+    public void deleteById(Long id);
 
-        return userRepository.findAll();
-    }
-
-    public void save(User user) {
-
-        userRepository.save(user);
-    }
-
-    public void deleteById(Long id) {
-
-        userRepository.deleteById(id);
-    }
-
-    public User findById(Long id) {
-
-        return userRepository.findById(id).orElse(null);
-    }
+    public User findById(Long id);
 }

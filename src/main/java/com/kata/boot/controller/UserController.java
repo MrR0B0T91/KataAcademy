@@ -1,7 +1,7 @@
 package com.kata.boot.controller;
 
 import com.kata.boot.model.User;
-import com.kata.boot.service.UserService;
+import com.kata.boot.service.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping
     public String getList(ModelMap model) {
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userServiceImpl.findAll());
         return "users";
     }
 
@@ -29,25 +29,25 @@ public class UserController {
 
     @PostMapping
     public String create(@ModelAttribute("user") User user) {
-        userService.save(user);
+        userServiceImpl.save(user);
         return "redirect:/users";
     }
 
     @GetMapping(value = "/{id}/edit")
     public String getUser(@PathVariable("id") Long id, ModelMap model) {
-        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("user", userServiceImpl.findById(id));
         return "edit";
     }
 
     @PostMapping("/update/{id}")
     public String updateUser(@ModelAttribute("user") User user) {
-        userService.save(user);
+        userServiceImpl.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteById(id);
+        userServiceImpl.deleteById(id);
         return "redirect:/users";
     }
 }
