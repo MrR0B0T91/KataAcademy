@@ -3,12 +3,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cars list</title>
+    <title>Admin</title>
 </head>
 <body>
-<h1>Users list</h1>
+<h1>Admin Page</h1>
 <div>
-    <table border="1">
+    <table th:border="1">
         <tr>
             <th>UserName</th>
             <th>Email</th>
@@ -29,9 +29,10 @@
                     <input type="submit" value="Delete"/>
                 </form>
             </td>
-            <td><form th:action="@{/admin/view/{id}(id=${user.getId()})}">
-                <input type="submit" value="View"/>
-            </form>
+            <td>
+                <form th:action="@{/admin/view/{id}(id=${user.getId()})}">
+                    <input type="submit" value="View"/>
+                </form>
             </td>
         </tr>
     </table>

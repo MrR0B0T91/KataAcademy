@@ -60,9 +60,9 @@ public class AppController {
         return "edit";
     }
 
-    @PostMapping("/admin/update/{id}")
-    public String updateUser(@ModelAttribute("user") User user) {
-        userService.save(user);
+    @PatchMapping("/admin/{id}")
+    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
+        userService.update(id, user);
         return "redirect:/admin";
     }
 
