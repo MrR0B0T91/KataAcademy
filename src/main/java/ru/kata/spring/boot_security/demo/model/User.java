@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -24,6 +23,11 @@ public class User implements UserDetails {
     @Column(name = "user_name")
     private String username;
 
+    @Column(name = "first_name")
+    private String name;
+
+    @Column(name = "second_name")
+    private String surname;
     @Column(name = "password")
     private String password;
 

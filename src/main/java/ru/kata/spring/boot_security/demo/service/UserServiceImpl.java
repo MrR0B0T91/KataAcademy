@@ -7,21 +7,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -42,13 +46,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public void save(User user) {
+    public void save(User user, List<String> roles) {
 
-        user.setRoles(Collections.singleton(new Role(2L, "ROLE_USER")));
+        user.setRoles(user.getRoles());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setEmail(user.getEmail());
         user.setUsername(user.getUsername());
         user.setAge(user.getAge());
+
+        Set<Role> roleSet = new HashSet<>();
+        for (String i : roles) {
+            roleSet.add(roleRepository.getById(Long.parseLong(i)));
+        }
+        user.setRoles(roleSet);
+
         userRepository.save(user);
     }
 
@@ -61,7 +72,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public void update(Long id, User user) {
+    public void update(Long id, User user, List<String> roles) {
 
         Optional<User> optionalUser = userRepository.findById(id);
 
@@ -69,9 +80,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             User updatedUser = optionalUser.get();
 
             updatedUser.setUsername(user.getUsername());
+            updatedUser.setName(user.getName());
+            updatedUser.setSurname(user.getSurname());
             updatedUser.setEmail(user.getEmail());
             updatedUser.setAge(user.getAge());
 
+            if (roles != null) {
+                Set<Role> roleSet = new HashSet<>();
+                for (String i : roles) {
+                    roleSet.add(roleRepository.getById(Long.parseLong(i)));
+                }
+                updatedUser.setRoles(roleSet);
+            }
+
+            if (!user.getPassword().equals(updatedUser.getPassword())) {
+                updatedUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            } else {
+                updatedUser.setPassword(user.getPassword());
+            }
             userRepository.save(updatedUser);
         }
     }
@@ -86,5 +112,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public User findByUsername(String username) {
 
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 }
