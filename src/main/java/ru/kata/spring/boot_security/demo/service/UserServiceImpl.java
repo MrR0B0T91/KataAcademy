@@ -49,7 +49,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public void save(User user, List<String> roles) {
 
-        user.setRoles(user.getRoles());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setUsername(user.getUsername());
         user.setAge(user.getAge());
