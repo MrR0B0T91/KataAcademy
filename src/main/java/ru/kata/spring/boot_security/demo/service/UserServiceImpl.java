@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
@@ -50,15 +51,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         user.setRoles(user.getRoles());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setEmail(user.getEmail());
         user.setUsername(user.getUsername());
         user.setAge(user.getAge());
-
-        Set<Role> roleSet = new HashSet<>();
-        for (String i : roles) {
-            roleSet.add(roleRepository.getById(Long.parseLong(i)));
-        }
-        user.setRoles(roleSet);
+        user.setRoles(toSetRoles(roles));
 
         userRepository.save(user);
     }
@@ -82,15 +77,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             updatedUser.setUsername(user.getUsername());
             updatedUser.setName(user.getName());
             updatedUser.setSurname(user.getSurname());
-            updatedUser.setEmail(user.getEmail());
             updatedUser.setAge(user.getAge());
 
             if (roles != null) {
-                Set<Role> roleSet = new HashSet<>();
-                for (String i : roles) {
-                    roleSet.add(roleRepository.getById(Long.parseLong(i)));
-                }
-                updatedUser.setRoles(roleSet);
+                updatedUser.setRoles(toSetRoles(roles));
             }
 
             if (!user.getPassword().equals(updatedUser.getPassword())) {
@@ -117,5 +107,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
+    }
+
+    private Set<Role> toSetRoles(List<String> roles) {
+
+        Set<Role> roleSet = new HashSet<>();
+        for (String i : roles) {
+            roleSet.add(roleRepository.getById(Long.parseLong(i)));
+        }
+
+        return roleSet;
     }
 }

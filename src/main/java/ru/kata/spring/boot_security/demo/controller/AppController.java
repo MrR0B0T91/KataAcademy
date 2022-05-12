@@ -18,6 +18,17 @@ public class AppController {
         this.userService = userService;
     }
 
+    @GetMapping(value = "/admin")
+    public String admin(ModelMap model, Principal principal) {
+
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("user", user);
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("roles", userService.getAllRoles());
+
+        return "admin";
+    }
+
     @GetMapping(value = "/user")
     public String userInfo(ModelMap model, Principal principal) {
         User user = userService.findByUsername(principal.getName());
@@ -29,19 +40,19 @@ public class AppController {
     @PostMapping("/admin/create")
     public String create(@ModelAttribute("user") User user, @RequestParam("role") List<String> roles) {
         userService.save(user, roles);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
-    @PatchMapping("/admin/{id}")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") Long id,
+    @PatchMapping("/admin/{id}/edit")
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") Long id,
                              @RequestParam(value = "role", required = false) List<String> roles) {
         userService.update(id, user, roles);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
     @GetMapping("/admin/{id}/delete")
-    public String deleteUser(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id) {
         userService.deleteById(id);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 }
