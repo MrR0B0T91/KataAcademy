@@ -19,12 +19,7 @@ public class AppController {
     }
 
     @GetMapping(value = "/admin")
-    public String admin(ModelMap model, Principal principal) {
-
-        User user = userService.findByUsername(principal.getName());
-        model.addAttribute("user", user);
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("roles", userService.getAllRoles());
+    public String admin() {
 
         return "admin";
     }
@@ -39,14 +34,14 @@ public class AppController {
 
     @PostMapping("/admin/create")
     public String create(@ModelAttribute("user") User user, @RequestParam("role") List<String> roles) {
-        userService.save(user, roles);
+        userService.save(user);
         return "redirect:/admin";
     }
 
     @PatchMapping("/admin/{id}/edit")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") Long id,
                              @RequestParam(value = "role", required = false) List<String> roles) {
-        userService.update(id, user, roles);
+        userService.update(id, user);
         return "redirect:/admin";
     }
 

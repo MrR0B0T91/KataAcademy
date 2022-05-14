@@ -5,27 +5,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
-    private final RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -47,12 +41,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public void save(User user, List<String> roles) {
+    public void save(User user) {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setUsername(user.getUsername());
         user.setAge(user.getAge());
-        user.setRoles(toSetRoles(roles));
+        user.setRoles(user.getRoles());
 
         userRepository.save(user);
     }
@@ -66,7 +60,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public void update(Long id, User user, List<String> roles) {
+    public void update(Long id, User user) {
 
         Optional<User> optionalUser = userRepository.findById(id);
 
@@ -78,9 +72,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             updatedUser.setSurname(user.getSurname());
             updatedUser.setAge(user.getAge());
 
-            if (roles != null) {
-                updatedUser.setRoles(toSetRoles(roles));
-            }
+            updatedUser.setRoles(user.getRoles());
 
             if (!user.getPassword().equals(updatedUser.getPassword())) {
                 updatedUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -103,18 +95,4 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userRepository.findByUsername(username);
     }
 
-    @Override
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
-    }
-
-    private Set<Role> toSetRoles(List<String> roles) {
-
-        Set<Role> roleSet = new HashSet<>();
-        for (String i : roles) {
-            roleSet.add(roleRepository.getById(Long.parseLong(i)));
-        }
-
-        return roleSet;
-    }
 }
