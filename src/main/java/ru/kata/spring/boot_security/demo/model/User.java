@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String password;
     @Column(name = "age")
     private String age;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     @Override
