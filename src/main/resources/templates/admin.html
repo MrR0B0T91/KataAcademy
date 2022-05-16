@@ -10,9 +10,7 @@
     <title>Admin</title>
 
 </head>
-
 <body>
-
 <!--верхний бар с логином и ролью-->
 <nav class="navbar navbar-dark bg-dark">
     <span class="navbar-brand mb-0 h1">
@@ -29,7 +27,6 @@
 </nav>
 
 <div class="row mt-3">
-
     <!--левый бар с кнопками админ и юзер-->
     <div class="col-2">
         <ul class="nav nav-pills flex-column">
@@ -41,10 +38,8 @@
             </li>
         </ul>
     </div>
-
     <!--правый бар с таблицей-->
     <div class="col-10 bg-light">
-
         <!--вкладки Users table, New user-->
         <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
@@ -52,10 +47,8 @@
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
                role="tab" aria-controls="nav-profile" aria-selected="false">New User</a>
         </div>
-
         <!--вкладка таблица-->
         <div class="tab-content" id="nav-tabContent">
-
             <div id="nav-home" class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-home-tab">
                 <div class="card-header">
                     <h5>All users</h5>
@@ -80,15 +73,13 @@
                     </table>
                 </div>
             </div>
-
-            <!--вкладка new User-->
+            <!--вкладка New User-->
             <div id="nav-profile" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-profile-tab">
                 <!--Add new user-->
                 <div class="card-header">
                     <h5>Add new user</h5>
                 </div>
                 <div class="container-fluid text-center col-3">
-
                     <form class="col" id="defaultSomeForm">
                         <div class="input-group mb-3">
                             <label>Name
@@ -125,28 +116,24 @@
 
                             <select id="newRole" class="custom-select bd-primary"
                                     size="2" name="role" multiple="multiple">
-                                <option value="1" text="ADMIN">ADMIN</option>
-                                <option value="2" text="USER">USER</option>
+                                <option value="1">ROLE_ADMIN</option>
+                                <option value="2">ROLE_USER</option>
                             </select>
                         </div>
-
                         <button type="button" class="btn btn-success" id="addNewUserButton">Add new user</button>
                     </form>
-
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
-<!--Модальные окна-->
+<!--Модальные окно-->
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="someDefaultModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -159,7 +146,6 @@
 
             <div class="modal-footer container-fluid text-center col-6">
             </div>
-
         </div>
     </div>
 </div>

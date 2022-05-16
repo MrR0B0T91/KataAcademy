@@ -8,15 +8,14 @@ const userService = {
         'Content-Type': 'application/json',
         'Referer': null
     },
-    findUserAuntificated: async () => await fetch('api/admin/user')
+    findUser: async () => await fetch('api/admin/user')
 }
-
 
 async function getUser() {
     let table = $('#mainUser tbody')
     table.empty()
 
-    await userService.findUserAuntificated()
+    await userService.findUser()
         .then(res => res.json())
         .then(user => {
             let tableMainUser = `$(
@@ -32,6 +31,12 @@ async function getUser() {
             )`;
             table.append(tableMainUser);
 
+            let roleName = $('#roleName')
+            user.roles.forEach(role => {
+                let roleList = `${role.name}`;
+                roleName.append(roleList)
+            })
+
             let userMenu = $('#userMenu')
             let userName = `${user.username}`
             userMenu.append(userName)
@@ -41,12 +46,5 @@ async function getUser() {
                 let roleList = `${role.name}`;
                 roleMenu.append(roleList)
             })
-
-            let roleName = $('#roleName')
-            user.roles.forEach(role => {
-                let roleList = `${role.name}`;
-                roleName.append(roleList)
-            })
-
         })
 }

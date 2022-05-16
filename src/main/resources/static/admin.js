@@ -1,7 +1,7 @@
 $(async function () {
-    await getUserTable();
-    addNewUser();
-    getDefaultModal()
+    await getUsersTable();
+    await addUser();
+    await getDefaultModal()
 })
 
 const userService = {
@@ -10,19 +10,27 @@ const userService = {
         'Content-Type': 'application/json',
         'Referer': null
     },
-    getUser: async () => await fetch('api/admin'),
-    findOneUser: async (id) => await fetch(`api/admin/${id}`),
-    findUserAuntificated: async () => await fetch('api/admin/user'),
-    addNewUser: async (user) => await fetch('api/admin', {method: 'POST', headers: userService.head, body: JSON.stringify(user)}),
+    getUsers: async () => await fetch('api/admin'),
+    findUser: async (id) => await fetch(`api/admin/${id}`),
+    findCurrentUser: async () => await fetch('api/admin/user'),
+    addNewUser: async (user) => await fetch('api/admin', {
+        method: 'POST',
+        headers: userService.head,
+        body: JSON.stringify(user)
+    }),
     deleteUser: async (id) => await fetch(`api/admin/${id}`, {method: 'DELETE', headers: userService.head}),
-    updateUser: async (user, id) => await fetch(`api/admin/${id}`, {method: 'PUT', headers: userService.head, body: JSON.stringify(user)}),
+    updateUser: async (user, id) => await fetch(`api/admin/${id}`, {
+        method: 'PUT',
+        headers: userService.head,
+        body: JSON.stringify(user)
+    })
 }
 
-async function getUserTable() {
+async function getUsersTable() {
     let table = $('#mainUser tbody');
     table.empty();
 
-    await userService.getUser()
+    await userService.getUsers()
         .then(res => res.json())
         .then(users => {
             users.forEach(user => {
@@ -54,8 +62,8 @@ async function getUserTable() {
                 })
             })
         })
-    let userAuntificated = await userService.findUserAuntificated();
-    let user = userAuntificated.json();
+    let currentUser = await userService.findCurrentUser();
+    let user = currentUser.json();
     user.then(userAut => {
         let userMenu = $("#userMenu");
         userMenu.empty();
@@ -108,10 +116,10 @@ async function getDefaultModal() {
 }
 
 async function editUser(modal, id) {
-    let findUser = await userService.findOneUser(id);
+    let findUser = await userService.findUser(id);
     let user = findUser.json();
 
-    modal.find('.modal-title').html('Изменить USER');
+    modal.find('.modal-title').html('Edit USER');
 
     let editButton = `<button type="button" id="editButton" class="btn btn-info">Edit</button>`;
     let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
@@ -121,10 +129,10 @@ async function editUser(modal, id) {
     user.then(user => {
         let dataRole = [{
             id: 1,
-            name: 'ADMIN'
+            name: 'ROLE_ADMIN'
         }, {
             id: 2,
-            name: 'USER'
+            name: 'ROLE_USER'
         }]
         let bodyForm = `
              <form role="form" class="form-horizontal" id="editUser">
@@ -135,36 +143,36 @@ async function editUser(modal, id) {
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Имя
+                            <label>Name
                                 <input type="text" class="form-control" id="name" value="${user.name}" 
                                        name="name">
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Фамилия
+                            <label>Surname
                                 <input type="text" class="form-control" id="surname" value="${user.surname}"
                                        name="lastName">
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Возраст
+                            <label>Age
                                 <input type="number" class="form-control" id="age" value="${user.age}" name="age">
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Электронная почта
+                            <label>Username
                                 <input type="text" class="form-control" id="username" value="${user.username}" name="email">
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Пароль
+                            <label>Password
                                 <input type="password" class="form-control" id="password" value="${user.password}"
                                        name="password">
                             </label>
                         </div>
                         <div class="d-flex flex-row bd-highlight">
                             <div class="form-group">
-                                <label for="roleList">Роль:
+                                <label for="roleList">Role:
                                     <select id="roleList" class="custom-select bd-primary"
                                             size="2" name="roleList" multiple="multiple">
                                             <option value="${dataRole[0].id}" >${dataRole[0].name}</option>
@@ -201,16 +209,16 @@ async function editUser(modal, id) {
         }
         console.log(data)
         await userService.updateUser(data, id);
-        getUserTable();
+        await getUsersTable();
         modal.modal('hide');
     })
 }
 
 async function deleteUser(modal, id) {
-    let findUser = await userService.findOneUser(id);
+    let findUser = await userService.findUser(id);
     let user = findUser.json();
 
-    modal.find('.modal-title').html('Удалить USER');
+    modal.find('.modal-title').html('Delete USER');
 
     let deleteButton = `<button type="button" id="deleteButton" class="btn btn-info">Delete</button>`;
     let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
@@ -220,10 +228,10 @@ async function deleteUser(modal, id) {
     user.then(user => {
         let dataRole = [{
             id: 1,
-            name: 'ADMIN'
+            name: 'ROLE_ADMIN'
         }, {
             id: 2,
-            name: 'USER'
+            name: 'ROLE_USER'
         }]
         let bodyForm = `
              <form role="form" class="form-horizontal" id="editUser">
@@ -234,30 +242,30 @@ async function deleteUser(modal, id) {
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Имя
+                            <label>Name
                                 <input type="text" class="form-control" id="name" value="${user.name}" 
                                        name="name" readonly="readonly">
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Фамилия
+                            <label>Surname
                                 <input type="text" class="form-control" id="lastName" value="${user.surname}"
                                        name="lastName" readonly="readonly">
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Возраст
+                            <label>Age
                                 <input type="number" class="form-control" id="age" value="${user.age}" name="age" readonly="readonly">
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Электронная почта
+                            <label>Username
                                 <input type="text" class="form-control" id="email" value="${user.username}" name="email" readonly="readonly">
                             </label>
                         </div>
                         <div class="d-flex flex-row bd-highlight">
                             <div class="form-group">
-                                <label for="roleList">Роль:
+                                <label for="roleList">Role:
                                     <select id="roleList" class="custom-select bd-primary"
                                             size="2" name="roleList" multiple="multiple" style="width: 210px" disabled="disabled">
                                             <option value="${dataRole[0].id}" >${dataRole[0].name}</option>
@@ -275,13 +283,13 @@ async function deleteUser(modal, id) {
     })
     $("#deleteButton").on('click', async () => {
         await userService.deleteUser(id);
-        getUserTable();
+        await getUsersTable();
         modal.modal('hide');
     })
 }
 
-async function addNewUser() {
-    $('#addNewUserButton').click(async () =>  {
+async function addUser() {
+    $('#addNewUserButton').click(async () => {
         let addUserForm = $('#defaultSomeForm')
         let name = addUserForm.find('#name').val();
         let surname = addUserForm.find('#surname').val();
@@ -298,7 +306,7 @@ async function addNewUser() {
             roles: roles
         }
         await userService.addNewUser(data);
-        await getUserTable();
+        await getUsersTable();
         addUserForm.find('#name').val('');
         addUserForm.find('#surname').val('');
         addUserForm.find('#age').val('');

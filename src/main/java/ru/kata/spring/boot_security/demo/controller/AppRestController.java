@@ -11,22 +11,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-public class MyRestController {
+public class AppRestController {
     private final UserService userService;
 
-    public MyRestController(UserService userService) {
+    public AppRestController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping()
-    public ResponseEntity getAllUsers() {
-        List<User> users = userService.findAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    public List<User> getAllUsers() {
+        return userService.findAll();
     }
+
     @GetMapping("/user")
-    public ResponseEntity<User> getUserAuntificated(Principal principal){
-        User user = userService.findByUsername(principal.getName());
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public User getCurrentUser(Principal principal) {
+        return userService.findByUsername(principal.getName());
     }
 
     @PostMapping()
@@ -36,14 +35,12 @@ public class MyRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> userInfo(@PathVariable("id") Long id) {
-        User user = userService.findById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public User get(@PathVariable("id") Long id) {
+        return userService.findById(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable Long id, @RequestBody User user) {
-        user.setId(id);
         userService.update(id, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

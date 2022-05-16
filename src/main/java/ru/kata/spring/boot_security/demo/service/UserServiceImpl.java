@@ -44,9 +44,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void save(User user) {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setUsername(user.getUsername());
-        user.setAge(user.getAge());
-        user.setRoles(user.getRoles());
 
         userRepository.save(user);
     }
@@ -65,13 +62,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isPresent()) {
+
             User updatedUser = optionalUser.get();
 
             updatedUser.setUsername(user.getUsername());
             updatedUser.setName(user.getName());
             updatedUser.setSurname(user.getSurname());
             updatedUser.setAge(user.getAge());
-
             updatedUser.setRoles(user.getRoles());
 
             if (!user.getPassword().equals(updatedUser.getPassword())) {
@@ -79,6 +76,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             } else {
                 updatedUser.setPassword(user.getPassword());
             }
+
             userRepository.save(updatedUser);
         }
     }
@@ -94,5 +92,4 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         return userRepository.findByUsername(username);
     }
-
 }

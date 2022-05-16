@@ -19,21 +19,16 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "user_name")
     private String username;
-
     @Column(name = "first_name")
     private String name;
-
     @Column(name = "second_name")
     private String surname;
     @Column(name = "password")
     private String password;
-
     @Column(name = "age")
     private String age;
-
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles;
 
