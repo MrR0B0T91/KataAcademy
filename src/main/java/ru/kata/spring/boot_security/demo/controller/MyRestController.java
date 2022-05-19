@@ -23,8 +23,9 @@ public class MyRestController {
         List<User> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
     @GetMapping("/user")
-    public ResponseEntity<User> getUserAuntificated(Principal principal){
+    public ResponseEntity<User> getCurrentUser(Principal principal) {
         User user = userService.findByUsername(principal.getName());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -36,14 +37,13 @@ public class MyRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> userInfo(@PathVariable("id") Long id) {
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         User user = userService.findById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable Long id, @RequestBody User user) {
-        user.setId(id);
         userService.update(id, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
