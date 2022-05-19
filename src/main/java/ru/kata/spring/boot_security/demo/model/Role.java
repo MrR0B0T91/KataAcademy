@@ -3,9 +3,8 @@ package ru.kata.spring.boot_security.demo.model;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Entity
@@ -14,6 +13,7 @@ public class Role implements GrantedAuthority {
 
     @Id
     private Long id;
+
     private String name;
 
     public Role() {
@@ -34,4 +34,8 @@ public class Role implements GrantedAuthority {
         return getName();
     }
 
+    @Override
+    public String toString() {
+        return name.replaceFirst("ROLE_", "") + " ";
+    }
 }
