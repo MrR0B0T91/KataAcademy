@@ -14,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
+@NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 public class User implements UserDetails {
 
     @Id
@@ -34,7 +35,7 @@ public class User implements UserDetails {
     @Column(name = "age")
     private String age;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<Role> roles;
 
     @Override
