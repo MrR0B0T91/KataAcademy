@@ -2,13 +2,11 @@ package ru.kata.spring.boot_security.demo.entity;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.management.relation.Relation;
 import javax.persistence.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Set;
 
 @Data
 @Entity
@@ -58,7 +56,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getUsername();
+        return username;
     }
 
     @Override
